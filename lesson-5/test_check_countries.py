@@ -16,7 +16,7 @@ def test_check_countries(set_driver):
     driver = set_driver
     url = "http://localhost/admin/?app=countries&doc=countries"
     driver.get(url)
-    driver.find_element_by_xpath('//input[@name="username"]').send_keys("admin")
+    driver.find_element_by_xpath('//input[@name="usern/checkoutname"]').send_keys("admin")
     driver.find_element_by_xpath('//input[@name="password"]').send_keys("admin")
     driver.find_element_by_xpath('//button[@name="login"]').click()
     assert driver.find_element_by_xpath(
