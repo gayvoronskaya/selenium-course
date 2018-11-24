@@ -2,6 +2,8 @@ import pytest
 
 from selenium import webdriver
 
+from selenium.webdriver.support.wait import WebDriverWait
+
 
 @pytest.fixture()
 def set_driver(request):
@@ -35,11 +37,32 @@ def test_window(set_driver):
     external_links = driver.find_elements_by_xpath(
         '//i[@class="fa fa-external-link"]')
 
+    main_window = driver.current_window_handle
+    new_window_wait = WebDriverWait(driver, 10)
+
     for link in external_links:
-        link.click()
-        main_window = driver.current_window_handle
-        print("111111" + main_window)
         exciting_windows = driver.window_handles
-        print(exciting_windows)
+        link.click()
+        new_window = new_window_wait.until(NewWindowIsExists(exciting_windows))
+
+        driver.switch_to.window(new_window)
+        driver.close()
+        driver.switch_to.window(main_window)
+
+class NewWindowIsExists:
+    def __init__(self, old_windows):
+        self.old_windows = old_windows
+
+    def __call__(self, driver):
+        new_windows = driver.window_handles
+
+        existing_windows = set(self.old_windows)
+        new_windows = set(new_windows)
+
+        diff = new_windows.difference(existing_windows)
+        if len(diff) == 1:
+            return diff.pop()
+
+        return False
 
 
