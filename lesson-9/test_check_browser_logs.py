@@ -35,10 +35,8 @@ def test_browser_logs(set_driver):
         products = driver.find_elements_by_xpath(
             '//td/img//following::a[not(@title="Edit")]')
         products[i].click()
-        error = driver.get_log("driver")
-        if error:
-            for i in error:
-                errlog.append(i)
+        for err in driver.get_log("browser"):
+            errlog.append(err)
         driver.back()
         i +=1
 
