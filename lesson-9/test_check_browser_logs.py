@@ -30,12 +30,16 @@ def test_browser_logs(set_driver):
         '//td/img//following::a[not(@title="Edit")]')
 
     i = 0
+    errlog = []
     while i < len(products):
         products = driver.find_elements_by_xpath(
             '//td/img//following::a[not(@title="Edit")]')
         products[i].click()
         error = driver.get_log("driver")
         if error:
-            print("Attention! %s" %error)
+            for i in error:
+                errlog.append(i)
         driver.back()
         i +=1
+
+    assert not errlog
